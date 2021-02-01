@@ -26,7 +26,6 @@ export class Grid {
                 grid[y].push(0);
             }
         }
-        console.log(grid);
         return grid;
     }
 

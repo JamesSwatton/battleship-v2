@@ -1,0 +1,40 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+#game-container {
+    display: flex;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    grid-template-rows: repeat(10, 1fr);
+    background-color: lightgray;
+}
+
+#grid-container-1 {
+    width: 600px;
+    height: 600px;
+}
+
+.grid-square {
+    box-sizing: border-box;
+    display: inline-block;
+    border: 2px solid white;
+}
+
+.grid-square:hover {
+    /* border: 4px dashed darkgray; */
+    background-color: darkgray;
+}
+
+#ship-select-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.ship {
+    background-color: cyan;
+}

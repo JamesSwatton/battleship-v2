@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>BATTLESHIP</title>
+        <link rel="stylesheet" href="style.css" />
+    </head>
+    <body>
+        <div id="game-container">
+            <div id="grid-container-1" class="grid-container"></div>
+            <div id="sidebar">
+                <div id="ship-select-container">
+                    <button class="ship-select" value="carrier">Carrier</button>
+                    <button class="ship-select" value="battleship">
+                        Battleship
+                    </button>
+                    <button class="ship-select" value="crusier">Crusier</button>
+                    <button class="ship-select" value="sub">Submarine</button>
+                    <button class="ship-select" value="destroyer">
+                        Destroyer
+                    </button>
+                    <p>Selected ship: <span id="selected-ship"></span></p>
+                </div>
+                <div id="grid-container-2" class="grid-container"></div>
+            </div>
+        </div>
+        <script type="module" src="src/main.js"></script>
+    </body>
+</html>

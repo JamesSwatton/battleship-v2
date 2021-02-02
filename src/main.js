@@ -40,3 +40,9 @@ document.addEventListener("keydown", event => {
 GRID_CONTAINER_1.addEventListener("click", () => {
     grid.saveShipPosition();
 });
+
+// clear grid
+document.getElementById('clear-grid').addEventListener("click", () => {
+    grid.clearGrid();
+    renderGrid(grid.grid);
+})

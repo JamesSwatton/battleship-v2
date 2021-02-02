@@ -22,6 +22,7 @@ export class Grid {
     set selectedShipType(shipType) {
         this._ships.forEach(ship => {
             if (ship.type === shipType) {
+                ship.positions = [];
                 this._selectedShipType = ship;
             }
         });
@@ -38,7 +39,7 @@ export class Grid {
         return grid;
     }
 
-    _addAllShipPos() {
+    addAllShipPos() {
         let overlap = false;
         this._ships.forEach(ship => {
             if (ship.positions) {
@@ -73,7 +74,7 @@ export class Grid {
             }
         }
         this._grid = this._createGrid();
-        this._addAllShipPos();
+        this.addAllShipPos();
     }
 
     saveShipPosition() {
@@ -95,5 +96,12 @@ export class Grid {
             return true;
         }
         return false;
+    }
+
+    clearGrid() {
+        this._ships.forEach(ship => {
+            ship.positions = [];
+        })
+        this._grid = this._createGrid();
     }
 }

@@ -87,6 +87,7 @@ export class Grid {
     }
 
     clearShip(shipType) {
+        this._selectedShipType = null;
         this._ships.forEach(ship => {
             if (shipType === ship.type) {
                 ship.positions = []

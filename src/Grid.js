@@ -12,6 +12,7 @@ export class Grid {
         ];
         this._grid = this._createGrid();
         this._selectedShipType = null;
+        this._overlap = false;
     }
 
     get grid() {
@@ -38,13 +39,20 @@ export class Grid {
     }
 
     _addAllShipPos() {
+        let overlap = false;
         this._ships.forEach(ship => {
             if (ship.positions) {
                 ship.positions.forEach(pos => {
-                    this._grid[pos[0]][pos[1]] = ship.type;
+                    if (this._hasOverlap(pos)) {
+                        overlap = true;
+                        this._grid[pos[0]][pos[1]] = 1;
+                    } else {
+                        this._grid[pos[0]][pos[1]] = ship.type;
+                    }
                 });
             }
         });
+        this._overlap = overlap ;
     }
 
     updateShipPos(pos, dir) {
@@ -53,12 +61,12 @@ export class Grid {
         if (this._selectedShipType) {
             this._selectedShipType.positions = [];
             if (dir === "horizontal") {
-                const x = this.constrainPos(pos[0]);
+                const x = this._constrainPos(pos[0]);
                 for (let i = x; i < x + this._selectedShipType.size; i++) {
                     this._selectedShipType.positions.push([y, i]);
                 }
             } else if (dir === "vertical") {
-                const y = this.constrainPos(pos[1]);
+                const y = this._constrainPos(pos[1]);
                 for (let j = y; j < y + this._selectedShipType.size; j++) {
                     this._selectedShipType.positions.push([j, x]);
                 }
@@ -69,12 +77,23 @@ export class Grid {
     }
 
     saveShipPosition() {
+        if (this._overlap) {
+            return 
+        }
         this._selectedShipType = null;
     }
 
-    constrainPos(pos) {
+    // helpers
+    _constrainPos(pos) {
         return pos < GRID_SIZE - this._selectedShipType.size
             ? pos
             : GRID_SIZE - this._selectedShipType.size;
+    }
+
+    _hasOverlap(pos) {
+        if (this._grid[pos[0]][pos[1]] !== 0) {
+            return true;
+        }
+        return false;
     }
 }

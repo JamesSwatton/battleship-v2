@@ -3,7 +3,7 @@ import { Grid } from "./Grid.js";
 import { GRID_CONTAINER_1 } from "./constants.js";
 
 let currentMousePos = 0;
-let selectedShip = null;
+let shipDir = "horizontal";
 
 const grid = new Grid();
 renderGrid(grid.grid);
@@ -11,17 +11,27 @@ renderGrid(grid.grid);
 // get selected ship
 document.querySelectorAll(".ship-select").forEach(shipSelect => {
     shipSelect.addEventListener("click", event => {
-        selectedShip = event.target.value;
-        console.log(selectedShip);
-        document.getElementById("selected-ship").textContent =
-            event.target.value;
+        grid.selectedShipType = event.target.value;
     });
 });
 
 // get mouse grid location
-
 GRID_CONTAINER_1.addEventListener("mouseover", event => {
     currentMousePos = event.target.id.split("-").map(pos => parseInt(pos));
-    grid.updateShipPos(selectedShip, currentMousePos);
+    grid.updateShipPos(currentMousePos, shipDir);
+    renderGrid(grid.grid);
+});
+
+// rotate ship
+document.addEventListener("keydown", event => {
+    const keyCode = event.keyCode;
+    if (keyCode === 32) {
+        if (shipDir === "horizontal") {
+            shipDir = "vertical";
+        } else if (shipDir === "vertical") {
+            shipDir = "horizontal";
+        }
+    }
+    grid.updateShipPos(currentMousePos, shipDir);
     renderGrid(grid.grid);
 });

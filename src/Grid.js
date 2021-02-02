@@ -10,7 +10,7 @@ export class Grid {
             { type: "sub",         size: 2, hits: 0, positions: [] },
             { type: "destroyer",   size: 2, hits: 0, positions: [] },
         ];
-        this._grid = this.createGrid();
+        this._grid = this._createGrid();
         this._selectedShipType = null;
     }
 
@@ -26,7 +26,7 @@ export class Grid {
         });
     }
 
-    createGrid() {
+    _createGrid() {
         const grid = [];
         for (let y = 0; y < GRID_SIZE; y++) {
             grid.push([]);
@@ -37,23 +37,39 @@ export class Grid {
         return grid;
     }
 
+    _addAllShipPos() {
+        this._ships.forEach(ship => {
+            if (ship.positions) {
+                ship.positions.forEach(pos => {
+                    this._grid[pos[0]][pos[1]] = ship.type;
+                });
+            }
+        });
+    }
+
     updateShipPos(pos, dir) {
         const x = pos[0];
         const y = pos[1];
-        this._grid = this.createGrid();
         if (this._selectedShipType) {
+            this._selectedShipType.positions = [];
             if (dir === "horizontal") {
                 const x = this.constrainPos(pos[0]);
                 for (let i = x; i < x + this._selectedShipType.size; i++) {
-                    this._grid[y][i] = this._selectedShipType.type;
+                    this._selectedShipType.positions.push([y, i]);
                 }
             } else if (dir === "vertical") {
                 const y = this.constrainPos(pos[1]);
                 for (let j = y; j < y + this._selectedShipType.size; j++) {
-                    this._grid[j][x] = this._selectedShipType.type;
+                    this._selectedShipType.positions.push([j, x]);
                 }
             }
         }
+        this._grid = this._createGrid();
+        this._addAllShipPos();
+    }
+
+    saveShipPosition() {
+        this._selectedShipType = null;
     }
 
     constrainPos(pos) {

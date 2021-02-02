@@ -35,3 +35,8 @@ document.addEventListener("keydown", event => {
     grid.updateShipPos(currentMousePos, shipDir);
     renderGrid(grid.grid);
 });
+
+// save ship position by passing null to selected ship
+GRID_CONTAINER_1.addEventListener("click", () => {
+    grid.saveShipPosition();
+});

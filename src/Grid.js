@@ -10,9 +10,10 @@ export class Grid {
             { type: "sub",         size: 2, hits: 0, positions: [] },
             { type: "destroyer",   size: 2, hits: 0, positions: [] },
         ];
-        this._grid = this._createGrid();
+        this._grid = [];
         this._selectedShipType = null;
         this._overlap = false;
+        this.reset();
     }
 
     get grid() {
@@ -26,17 +27,18 @@ export class Grid {
                 this._selectedShipType = ship;
             }
         });
+        this._clearGrid();
+        this.addAllShipPos();
     }
 
-    _createGrid() {
-        const grid = [];
+    _clearGrid() {
+        this._grid = []
         for (let y = 0; y < GRID_SIZE; y++) {
-            grid.push([]);
+            this._grid.push([]);
             for (let x = 0; x < GRID_SIZE; x++) {
-                grid[y].push(0);
+                this._grid[y].push(0);
             }
         }
-        return grid;
     }
 
     addAllShipPos() {
@@ -73,7 +75,7 @@ export class Grid {
                 }
             }
         }
-        this._grid = this._createGrid();
+        this._clearGrid();
         this.addAllShipPos();
     }
 
@@ -82,6 +84,24 @@ export class Grid {
             return 
         }
         this._selectedShipType = null;
+    }
+
+    clearShip(shipType) {
+        this._ships.forEach(ship => {
+            if (shipType === ship.type) {
+                ship.positions = []
+                this._clearGrid();
+            }
+        })
+    }
+
+    reset() {
+        this._ships.forEach(ship => {
+            ship.positions = [];
+        })
+        this._selectedShipType = null;
+        this._overlap = false;
+        this._clearGrid();
     }
 
     // helpers
@@ -96,12 +116,5 @@ export class Grid {
             return true;
         }
         return false;
-    }
-
-    clearGrid() {
-        this._ships.forEach(ship => {
-            ship.positions = [];
-        })
-        this._grid = this._createGrid();
     }
 }

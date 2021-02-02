@@ -2,7 +2,14 @@ import { renderGrid } from "./rendering.js";
 import { Grid } from "./Grid.js";
 import { GRID_CONTAINER_1 } from "./constants.js";
 
+let states = [
+    "placement",
+    "playing"
+]
+let gameState = states[0];
+
 let currentMousePos = 0;
+let selectedShipType = "";
 let shipDir = "horizontal";
 
 const grid = new Grid();
@@ -11,7 +18,9 @@ renderGrid(grid.grid);
 // get selected ship
 document.querySelectorAll(".ship-select").forEach(shipSelect => {
     shipSelect.addEventListener("click", event => {
-        grid.selectedShipType = event.target.value;
+        selectedShipType = event.target.value;
+        grid.selectedShipType = selectedShipType;
+        renderGrid(grid.grid);
     });
 });
 
@@ -22,15 +31,17 @@ GRID_CONTAINER_1.addEventListener("mouseover", event => {
     renderGrid(grid.grid);
 });
 
-// rotate ship
+// rotate ship and delete selected ship
 document.addEventListener("keydown", event => {
-    const keyCode = event.keyCode;
+    let keyCode = event.keyCode;
     if (keyCode === 32) {
         if (shipDir === "horizontal") {
             shipDir = "vertical";
         } else if (shipDir === "vertical") {
             shipDir = "horizontal";
         }
+    } else if (keyCode = 8) {
+        grid.clearShip(selectedShipType);
     }
     grid.updateShipPos(currentMousePos, shipDir);
     renderGrid(grid.grid);
@@ -43,6 +54,6 @@ GRID_CONTAINER_1.addEventListener("click", () => {
 
 // clear grid
 document.getElementById('clear-grid').addEventListener("click", () => {
-    grid.clearGrid();
+    grid.reset();
     renderGrid(grid.grid);
 })

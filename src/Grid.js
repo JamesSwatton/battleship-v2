@@ -43,14 +43,22 @@ export class Grid {
         this._grid = this.createGrid();
         if (this._selectedShipType) {
             if (dir === "horizontal") {
+                const x = this.constrainPos(pos[0]);
                 for (let i = x; i < x + this._selectedShipType.size; i++) {
                     this._grid[y][i] = this._selectedShipType.type;
                 }
             } else if (dir === "vertical") {
+                const y = this.constrainPos(pos[1]);
                 for (let j = y; j < y + this._selectedShipType.size; j++) {
                     this._grid[j][x] = this._selectedShipType.type;
                 }
             }
         }
+    }
+
+    constrainPos(pos) {
+        return pos < GRID_SIZE - this._selectedShipType.size
+            ? pos
+            : GRID_SIZE - this._selectedShipType.size;
     }
 }

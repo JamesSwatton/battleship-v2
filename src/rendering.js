@@ -7,22 +7,31 @@ import {
 
 import { newElement } from "./helpers/newElement.js";
 
-export function renderGrid(grid) {
+export function createGrid() {
     GRID_CONTAINER_1.innerHTML = "";
     for (let y = 0; y < GRID_SIZE; y++) {
         for (let x = 0; x < GRID_SIZE; x++) {
             let id = `${x}-${y}`;
-            const gridSquare = document.createElement("div");
-            gridSquare.id = id;
-            gridSquare.classList.add("grid-square");
-            if (grid[y][x] !== 0) {
-                if (grid[y][x] !== 1) {
-                    gridSquare.classList.add("ship");
-                } else {
-                    gridSquare.classList.add("overlap");
-                }
-            }
+            const gridSquare = newElement(id, "grid-square", "div");
             GRID_CONTAINER_1.appendChild(gridSquare);
         }
     }
+}
+
+export function renderGrid(saveGrid, selectGrid) {
+    for (let y = 0; y < GRID_SIZE; y++) {
+        for (let x = 0; x < GRID_SIZE; x++) {
+            let gridSquare = document.getElementById(`${x}-${y}`);
+            gridSquare.classList.remove("ship", "overlap");
+            if (saveGrid[y][x] !== 0 && selectGrid[y][x] !== 0) {
+                gridSquare.classList.add("overlap");
+            } else if (saveGrid[y][x] !== 0 || selectGrid[y][x] !== 0) {
+                gridSquare.classList.add("ship");
+            }
+        }
+    }
+}
+
+export function renderSelectedShip(shipPos) {
+    ShipPos.forEach(pos => {});
 }

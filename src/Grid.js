@@ -7,7 +7,7 @@ export class Grid {
             { type: "carrier",     size: 5, hits: 0, positions: [] },
             { type: "battleship",  size: 4, hits: 0, positions: [] },
             { type: "crusier",     size: 3, hits: 0, positions: [] },
-            { type: "sub",         size: 2, hits: 0, positions: [] },
+            { type: "sub",         size: 3, hits: 0, positions: [] },
             { type: "destroyer",   size: 2, hits: 0, positions: [] },
         ];
         this._grid = [];
@@ -103,6 +103,20 @@ export class Grid {
         this._selectedShipType = null;
         this._overlap = false;
         this._clearGrid();
+    }
+
+    placeRandom() {
+        const dirs = ["horizontal", "vertical"];
+        const randomDir = () => dirs[Math.floor(Math.random() * 2)];
+        const getRandom = () => Math.floor(Math.random() * 10)
+        console.log(randomDir(), getRandom());
+        this._ships.forEach(ship => {
+            let randPos = [getRandom(), getRandom()];
+            console.log(randPos);
+            this.selectedShipType = ship.type;
+            this.updateShipPos(randPos);
+            // if overlap repeat placement until no overlap
+        })
     }
 
     // helpers

@@ -57,3 +57,9 @@ document.getElementById('clear-grid').addEventListener("click", () => {
     grid.reset();
     renderGrid(grid.grid);
 })
+
+// place all ships randomly
+document.getElementById('place-random').addEventListener("click", () => {
+    grid.placeRandom();
+    renderGrid(grid.grid) 
+})

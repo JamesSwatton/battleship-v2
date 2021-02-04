@@ -47,19 +47,20 @@ document.addEventListener("keydown", event => {
 
 // save ship position by passing null to selected ship
 GRID_CONTAINER_1.addEventListener("click", () => {
-    grid.saveSelectedShipPos();
-    selectedShip = null;
-    renderGrid(grid.savedShipPos, grid.selectedShipPos);
+    if (grid.saveSelectedShipPos()) {
+        selectedShip = null;
+        renderGrid(grid.savedShipPos, grid.selectedShipPos);
+    }
 });
 
 // clear grid
 document.getElementById("clear-grid").addEventListener("click", () => {
     grid.reset();
-    renderGrid(grid.grid);
+    renderGrid(grid.savedShipPos, grid.selectedShipPos);
 });
 
 // place all ships randomly
 document.getElementById("place-random").addEventListener("click", () => {
     grid.placeRandom();
-    renderGrid(grid.grid);
+    renderGrid(grid.savedShipPos, grid.selectedShipPos);
 });

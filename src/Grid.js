@@ -59,14 +59,18 @@ export class Grid {
     }
 
     saveSelectedShipPos() {
-        for (let y = 0; y < GRID_SIZE; y++) {
-            for (let x = 0; x < GRID_SIZE; x++) {
-                if (this._selectedShipPos[y][x] !== 0) {
-                    this._savedShipPos[y][x] = this._selectedShipPos[y][x];
+        if (!this._hasOverlap()) {
+            for (let y = 0; y < GRID_SIZE; y++) {
+                for (let x = 0; x < GRID_SIZE; x++) {
+                    if (this._selectedShipPos[y][x] !== 0) {
+                        this._savedShipPos[y][x] = this._selectedShipPos[y][x];
+                    }
                 }
             }
+            this.clearGrid(1);
+            return true;
         }
-        this.clearGrid(1);
+        return false;
     }
 
     clearShipPos(n) {
@@ -99,12 +103,19 @@ export class Grid {
         return pos < GRID_SIZE - size ? pos : GRID_SIZE - size;
     }
 
-    _hasOverlap(shipPositions) {
-        shipPositions.forEach(pos => {
-            if (this._grid[pos[0]][pos[1]] !== 0) {
-                return true;
+    _hasOverlap() {
+        let result = false;
+        for (let y = 0; y < GRID_SIZE; y++) {
+            for (let x = 0; x < GRID_SIZE; x++) {
+                if (
+                    this._savedShipPos[y][x] !== 0 &&
+                    this._selectedShipPos[y][x] !== 0
+                ) {
+                    result = true;
+                }
             }
-        });
-        return false;
+        }
+        console.log(result);
+        return result;
     }
 }

@@ -16,15 +16,17 @@ createGrid();
 // get selected ship
 document.querySelectorAll(".ship-select").forEach(shipSelect => {
     shipSelect.addEventListener("click", event => {
-        selectedShip = event.target.value;
+        selectedShip = parseInt(event.target.value);
+        grid.selectedShip = selectedShip;
+        renderGrid(grid.savedShipPos, grid.selectedShipPos);
     });
 });
 
 // update selected ship location
 document.querySelectorAll(".grid-square").forEach(gridSquare => {
     gridSquare.addEventListener("mouseenter", event => {
-        currentMousePos = event.target.id.split("-").map(pos => parseInt(pos));
-        grid.updateSelectedShipPos(selectedShip, currentMousePos, shipDir);
+        currentMousePos = event.target.id.split("").map(pos => parseInt(pos));
+        grid.updateSelectedShipPos(currentMousePos, shipDir);
         renderGrid(grid.savedShipPos, grid.selectedShipPos);
     });
 });
@@ -39,18 +41,24 @@ document.addEventListener("keydown", event => {
             shipDir = "horizontal";
         }
     } else if ((keyCode = 8)) {
-        grid.clearShip(selectedShip);
+        grid.clearShipPos(selectedShip);
     }
-    grid.updateSelectedShipPos(selectedShip, currentMousePos, shipDir);
+    grid.updateSelectedShipPos(currentMousePos, shipDir);
     renderGrid(grid.savedShipPos, grid.selectedShipPos);
 });
+
+// clear ship if mouse leaves grid 
+GRID_CONTAINER_1.addEventListener("mouseleave", () => {
+    grid.clearShipPos(selectedShip);
+    renderGrid(grid.savedShipPos, grid.selectedShipPos);
+})
 
 // save ship position by passing null to selected ship
 GRID_CONTAINER_1.addEventListener("click", () => {
     if (grid.saveSelectedShipPos()) {
-        selectedShip = null;
         renderGrid(grid.savedShipPos, grid.selectedShipPos);
     }
+    grid._hasPlacedAllShips();
 });
 
 // clear grid

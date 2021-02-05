@@ -10,9 +10,7 @@ export class Grid {
             { type: "sub",        size: 3, hits: 0, positions: [] },
             { type: "destroyer",  size: 2, hits: 0, positions: [] }
         ];
-
         this._selectedShip = null;
-
         this._overlap = false;
         this.reset();
     }
@@ -59,11 +57,11 @@ export class Grid {
     }
 
     saveSelectedShipPos() {
-        if (!this._hasOverlap()) {
-            this._selectedShip = null;
-            return true;
+        if (this._hasOverlap()) {
+            return false;
         }
-        return false;
+        this._selectedShip = null;
+        return true;
     }
 
     clearShipPos(n) {
@@ -75,19 +73,22 @@ export class Grid {
     reset() {
         this._ships.forEach(ship => (ship.positions = []));
         this._overlap = false;
+        this._selectedShip = null;
     }
 
     placeRandom() {
         const dirs = ["horizontal", "vertical"];
-        const randomDir = () => dirs[Math.floor(Math.random() * 2)];
-        const getRandom = () => Math.floor(Math.random() * 10);
-        console.log(randomDir(), getRandom());
+        let randomDir = () => dirs[Math.floor(Math.random() * 2)];
+
+        this.reset();
+
         this._ships.forEach(ship => {
-            let randPos = [getRandom(), getRandom()];
-            console.log(randPos);
-            this.selectedShip = ship.type;
-            this.updateShipPos(randPos);
-            // if overlap repeat placement until no overlap
+            this._selectedShip = ship;
+            this.updateSelectedShipPos(this._getRandomPos(), randomDir());
+            while (this._hasOverlap()) {
+                this.updateSelectedShipPos(this._getRandomPos(), randomDir());
+            }
+            this.saveSelectedShipPos();
         });
     }
 
@@ -109,7 +110,16 @@ export class Grid {
     }
 
     _hasPlacedAllShips() {
-        const totalPos = this._ships.map(ship => ship.size).reduce((a, b) => a+b)
-        console.log(this.savedShipPos.length === totalPos ? true : false);
+        const totalPos = this._ships
+            .map(ship => ship.size)
+            .reduce((a, b) => a + b);
+        return this.savedShipPos.length === totalPos ? true : false;
+    }
+
+    _getRandomPos() {
+        let randX = Math.floor(Math.random() * 10);
+        let randY = Math.floor(Math.random() * 10);
+        let randPos = [randX, randY];
+        return randPos;
     }
 }

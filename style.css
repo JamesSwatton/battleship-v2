@@ -19,14 +19,24 @@
     height: 600px;
 }
 
+#grid-container-2 {
+    width: 200px;
+    height: 200px;
+}
+
+#sidebar {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
 .grid-square {
     box-sizing: border-box;
     display: inline-block;
     border: 2px solid white;
 }
 
-.grid-square:hover {
-    /* border: 4px dashed darkgray; */
+#grid-container-1 .grid-square:hover {
     background-color: darkgray;
 }
 

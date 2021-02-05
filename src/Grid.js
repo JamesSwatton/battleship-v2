@@ -37,6 +37,12 @@ export class Grid {
         return this._selectedShip ? this._selectedShip.positions : [];
     }
 
+    reset() {
+        this._ships.forEach(ship => (ship.positions = []));
+        this._overlap = false;
+        this._selectedShip = null;
+    }
+
     updateSelectedShipPos(pos, dir) {
         let x = pos[0];
         let y = pos[1];
@@ -68,12 +74,6 @@ export class Grid {
         if (this._selectedShip) {
             this._ships[n].positions = [];
         }
-    }
-
-    reset() {
-        this._ships.forEach(ship => (ship.positions = []));
-        this._overlap = false;
-        this._selectedShip = null;
     }
 
     placeRandom() {

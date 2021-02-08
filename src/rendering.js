@@ -19,19 +19,6 @@ export function createGrid(gridContainer) {
 }
 
 export function renderGrid(gridContainer, savePos, selectPos) {
-    // for (let y = 0; y < GRID_SIZE; y++) {
-    //     for (let x = 0; x < GRID_SIZE; x++) {
-    //         let id = `${x}${y}`;
-    //         let gridSquare = document.getElementById(id);
-    //         gridSquare.classList.remove("ship", "overlap");
-    //         if (savePos.includes(id) && selectPos.includes(id)) {
-    //             gridSquare.classList.add("overlap");
-    //         } else if (savePos.includes(id) || selectPos.includes(id)) {
-    //             gridSquare.classList.add("ship");
-    //         }
-    //     }
-    // }
-
     gridContainer.querySelectorAll(".grid-square").forEach(gridSquare => {
         let id = gridSquare.id;
         gridSquare.classList.remove("ship", "overlap");
@@ -39,6 +26,21 @@ export function renderGrid(gridContainer, savePos, selectPos) {
             gridSquare.classList.add("overlap");
         } else if (savePos.includes(id) || selectPos.includes(id)) {
             gridSquare.classList.add("ship");
+        }
+    });
+}
+
+export function renderShipSelect() {
+    document.querySelectorAll(".ship-select").forEach(shipSelect => {
+        if (
+            !shipSelect.classList.contains("selected") &&
+            !shipSelect.classList.contains("placed")
+        ) {
+            shipSelect.innerHTML = shipSelect.id;
+        } else if (shipSelect.classList.contains("selected")) {
+            shipSelect.innerHTML = "&#9642; " + shipSelect.id + " &#9667;";
+        } else if (shipSelect.classList.contains("placed")) {
+            shipSelect.innerHTML = "&#10032; " + shipSelect.id;
         }
     });
 }

@@ -3,6 +3,12 @@
     padding: 0;
 }
 
+#game {
+    width: 800px;
+    margin: auto;
+    margin-top: 100px;
+}
+
 #game-container {
     display: flex;
 }
@@ -15,6 +21,7 @@
 }
 
 #grid-container-1 {
+    margin-right: 10px;
     width: 600px;
     height: 600px;
 }
@@ -36,7 +43,7 @@
     border: 2px solid white;
 }
 
-#grid-container-1 .grid-square:hover {
+.mouse-location {
     background-color: darkgray;
 }
 
@@ -45,10 +52,34 @@
     flex-direction: column;
 }
 
+#clear-random-ready {
+    margin-top: 50px;
+}
+
 .ship {
-    background-color: cyan;
+    cursor: pointer;
+    background-color: dodgerblue;
 }
 
 .overlap {
-    background-color: red;
+    background-color: lightcoral;
+}
+
+.other:hover {
+    color: white;
+    background-color: black;
+}
+
+.mybtn {
+    margin-top: 2px;
+    margin-bottom: 2px;
+    cursor: pointer;
+}
+
+.selected {
+    color: black;
+}
+
+.placed {
+    color: black;
 }

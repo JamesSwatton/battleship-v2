@@ -7,7 +7,7 @@ export class Grid {
             { type: "carrier",    size: 5, hits: 0, positions: [] },
             { type: "battleship", size: 4, hits: 0, positions: [] },
             { type: "crusier",    size: 3, hits: 0, positions: [] },
-            { type: "sub",        size: 3, hits: 0, positions: [] },
+            { type: "submarine",  size: 3, hits: 0, positions: [] },
             { type: "destroyer",  size: 2, hits: 0, positions: [] }
         ];
         this._selectedShip = null;
@@ -63,7 +63,7 @@ export class Grid {
     }
 
     saveSelectedShipPos() {
-        if (this._hasOverlap()) {
+        if (this._hasOverlap() || this._selectedShip === null) {
             return false;
         }
         this._selectedShip = null;
@@ -109,7 +109,7 @@ export class Grid {
         }
     }
 
-    _hasPlacedAllShips() {
+    hasPlacedAllShips() {
         const totalPos = this._ships
             .map(ship => ship.size)
             .reduce((a, b) => a + b);
@@ -121,5 +121,16 @@ export class Grid {
         let randY = Math.floor(Math.random() * 10);
         let randPos = [randX, randY];
         return randPos;
+    }
+
+    getShipFromPos(pos) {
+        let result = null
+        this._ships.forEach((ship, i) => {
+            if (ship.positions.includes(pos)) {
+                // console.log(ship.type, i)
+                result = i;
+            }
+        });
+        return result ;
     }
 }

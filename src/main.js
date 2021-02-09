@@ -1,4 +1,9 @@
-import { createGrid, renderGrid, renderShipSelect } from "./rendering.js";
+import {
+    createGrid,
+    renderGrid,
+    renderShipSelect,
+    renderHitMiss
+} from "./rendering.js";
 import { Grid } from "./Grid.js";
 import { GRID_CONTAINER_1, GRID_CONTAINER_2 } from "./constants.js";
 
@@ -20,9 +25,12 @@ opponentGrid.placeRandom();
 // get selected ship
 // TODO: write about how insane this kind of style switching is!
 document.querySelectorAll(".ship-select").forEach(shipSelect => {
+    let capName =
+        shipSelect.id.charAt(0).toUpperCase() + shipSelect.id.slice(1);
+
     shipSelect.addEventListener("click", () => {
         if (gameState === "placement") {
-            selectedShip = parseInt(shipSelect.dataset.value);
+            selectedShip = shipSelect.id;
             playerGrid.selectedShip = selectedShip;
             renderGrid(
                 GRID_CONTAINER_1,
@@ -45,20 +53,25 @@ document.querySelectorAll(".ship-select").forEach(shipSelect => {
 
     // update selected item symbols
     shipSelect.addEventListener("mouseenter", () => {
-        shipSelect.innerHTML += " &#9667;";
+        if (gameState === "placement") {
+            shipSelect.innerHTML += " &#9667;";
+        }
     });
+
     shipSelect.addEventListener("mouseleave", () => {
-        if (
-            !shipSelect.classList.contains("selected") &&
-            !shipSelect.classList.contains("placed")
-        ) {
-            shipSelect.innerHTML = shipSelect.innerHTML.split(" ")[0];
-        } else {
-            let newInner = shipSelect.innerHTML
-                .split(" ")
-                .slice(0, 2)
-                .join(" ");
-            shipSelect.innerHTML = newInner;
+        if (gameState === "placement") {
+            if (
+                !shipSelect.classList.contains("selected") &&
+                !shipSelect.classList.contains("placed")
+            ) {
+                shipSelect.innerHTML = capName;
+            } else {
+                let newInner = shipSelect.innerHTML
+                    .split(" ")
+                    .slice(0, 2)
+                    .join(" ");
+                shipSelect.innerHTML = newInner;
+            }
         }
     });
 });
@@ -76,7 +89,10 @@ GRID_CONTAINER_1.querySelectorAll(".grid-square").forEach(gridSquare => {
                 playerGrid.savedShipPos,
                 playerGrid.selectedShipPos
             );
-        } else if (gameState === "placement" && selectedShip === null) {
+        } else if (
+            (gameState === "placement" && selectedShip === null) ||
+            gameState === "game"
+        ) {
             gridSquare.classList.add("mouse-location");
         }
     });
@@ -107,6 +123,7 @@ document.addEventListener("keydown", event => {
         );
     }
 });
+
 // clear ship if mouse leaves grid
 GRID_CONTAINER_1.addEventListener("mouseleave", () => {
     if (gameState === "placement") {
@@ -127,10 +144,11 @@ GRID_CONTAINER_1.querySelectorAll(".grid-square").forEach(gridSquare => {
                 document
                     .querySelectorAll(".ship-select")
                     .forEach(shipSelect => {
-                        if (
-                            parseInt(shipSelect.dataset.value) === selectedShip
-                        ) {
-                            shipSelect.innerHTML = "&#10032; " + shipSelect.id;
+                        let capName =
+                            shipSelect.id.charAt(0).toUpperCase() +
+                            shipSelect.id.slice(1);
+                        if (shipSelect.id === selectedShip) {
+                            shipSelect.innerHTML = "&#10032; " + capName;
                             shipSelect.classList.remove("selected");
                             shipSelect.classList.add("placed");
                         }
@@ -150,12 +168,24 @@ GRID_CONTAINER_1.querySelectorAll(".grid-square").forEach(gridSquare => {
                 playerGrid.clearShipPos(selectedShip);
                 playerGrid.selectedShip = selectedShip;
                 playerGrid.updateSelectedShipPos(currentMousePos, shipDir);
-                console.log(playerGrid.selectedShipPos);
+                let el = document.getElementById(selectedShip);
+                el.classList.remove("placed");
+                el.classList.add("selected");
+                el.innerHTML = el.id.charAt(0).toUpperCase() + el.id.slice(1);
+                renderShipSelect();
                 renderGrid(
                     GRID_CONTAINER_1,
                     playerGrid.savedShipPos,
                     playerGrid.selectedShipPos
                 );
+            }
+        } else if (gameState === "game") {
+            if (opponentGrid.checkForHit(gridSquare.id)) {
+                console.log("hit");
+                renderHitMiss(gridSquare.id, true);
+            } else {
+                console.log("miss");
+                renderHitMiss(gridSquare.id, false);
             }
         }
     });
@@ -199,12 +229,13 @@ document.getElementById("start").addEventListener("click", () => {
     if (playerGrid.hasPlacedAllShips()) {
         gameState = states[1];
         document.getElementById("messages").textContent = "The game has begun!";
-        createGrid(GRID_CONTAINER_1);
-        renderGrid(
-            GRID_CONTAINER_1,
-            opponentGrid.savedShipPos,
-            opponentGrid.selectedShipPos
-        );
+        // createGrid(GRID_CONTAINER_1);
+        // renderGrid(
+        //     GRID_CONTAINER_1,
+        //     opponentGrid.savedShipPos,
+        //     opponentGrid.selectedShipPos
+        // );
+        renderGrid(GRID_CONTAINER_1, [], []);
         renderGrid(
             GRID_CONTAINER_2,
             playerGrid.savedShipPos,

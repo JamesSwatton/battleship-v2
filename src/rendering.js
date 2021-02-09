@@ -32,15 +32,28 @@ export function renderGrid(gridContainer, savePos, selectPos) {
 
 export function renderShipSelect() {
     document.querySelectorAll(".ship-select").forEach(shipSelect => {
+        let capName =
+            shipSelect.id.charAt(0).toUpperCase() + shipSelect.id.slice(1);
         if (
             !shipSelect.classList.contains("selected") &&
             !shipSelect.classList.contains("placed")
         ) {
-            shipSelect.innerHTML = shipSelect.id;
+            shipSelect.innerHTML = capName;
         } else if (shipSelect.classList.contains("selected")) {
-            shipSelect.innerHTML = "&#9642; " + shipSelect.id + " &#9667;";
+            shipSelect.innerHTML = "&#9642; " + capName;
         } else if (shipSelect.classList.contains("placed")) {
-            shipSelect.innerHTML = "&#10032; " + shipSelect.id;
+            shipSelect.innerHTML = "&#10032; " + capName;
         }
     });
+}
+
+export function renderHitMiss(pos, isHit) {
+    let gridSquare = document.getElementById(pos);
+    if (isHit) {
+        gridSquare.classList.remove("ship");
+        gridSquare.classList.add("overlap");
+        gridSquare.innerHTML = "<p>&#9670;</p>";
+    } else {
+        gridSquare.innerHTML = "<p>&#9671;</p>";
+    }
 }

@@ -37,11 +37,20 @@
     justify-content: space-between;
 }
 
+#messages {
+    margin-top: 10px;
+}
+
 .grid-square {
+    cursor: default;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5em;
     box-sizing: border-box;
-    display: inline-block;
     border: 2px solid white;
 }
+
 
 .mouse-location {
     background-color: darkgray;
@@ -83,3 +92,4 @@
 .placed {
     color: black;
 }
+

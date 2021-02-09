@@ -28,8 +28,8 @@ export class Grid {
             .flat();
     }
 
-    set selectedShip(n) {
-        this._selectedShip = this._ships[n];
+    set selectedShip(shipType) {
+        this._selectedShip = this._ships.find(s => s.type === shipType);
         this._selectedShip.positions = [];
     }
 
@@ -70,9 +70,9 @@ export class Grid {
         return true;
     }
 
-    clearShipPos(n) {
+    clearShipPos(shipType) {
         if (this._selectedShip) {
-            this._ships[n].positions = [];
+            this._ships.find(s => s.type === shipType).positions = [];
         }
     }
 
@@ -90,6 +90,17 @@ export class Grid {
             }
             this.saveSelectedShipPos();
         });
+    }
+
+    checkForHit(pos) {
+        let result = false;
+        this._ships.forEach(s => {
+            if (s.positions.includes(pos)) {
+                s.hits += 1;
+                result = true;
+            }
+        });
+        return result;
     }
 
     // helpers
@@ -124,13 +135,12 @@ export class Grid {
     }
 
     getShipFromPos(pos) {
-        let result = null
+        let result = null;
         this._ships.forEach((ship, i) => {
             if (ship.positions.includes(pos)) {
-                // console.log(ship.type, i)
-                result = i;
+                result = ship.type;
             }
         });
-        return result ;
+        return result;
     }
 }
